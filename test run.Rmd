@@ -1,0 +1,58 @@
+---
+title: "test_run"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+#loading scraped data
+library(ggplot2);
+library(RCurl);
+library(XML);
+library(rvest);
+library(maps)
+link2="https://www.wunderground.com/hurricane/archive/AL/2019/Hurricane-Dorian/2019235N10324"
+page2=getURL(link2)
+hurricane=readHTMLTable(page2)
+hurdata=hurricane[[1]]
+
+
+
+```
+
+## Data:
+Data was scraped from https://www.wunderground.com/hurricane/archive/AL/2019/Hurricane-Dorian/2019235N10324. This data summarizes latitude and longitude points of types of tropical weather in the South East United States.
+
+
+```{r, echo=FALSE}
+lat=as.numeric(as.character(hurdata$` Lat `))
+long=as.numeric(as.character(hurdata$` Lon `))
+
+typestr=as.character(hurdata$` Storm Type `)
+typestr1=gsub("Tropical Depression","grey",typestr)
+typestr2=gsub("Tropical Storm","lightblue",typestr1)
+typestr3=gsub("Category 1 Hurricane", "blue",typestr2)
+typestr4=gsub("Category 2 Hurricane", "green",typestr3)
+typestr5=gsub("Category 3 Major Hurricane", "orange",typestr4)
+typestr6=gsub("Category 4 Major Hurricane","red",typestr5)
+typestr7=gsub("Category 5 Major Hurricane","purple",typestr6)
+typestr8=gsub("Tropical Low","grey",typestr7)
+typestr9=gsub("Tropical Disturbance","grey",typestr8)
+typestr10=gsub("Extratropical", "grey", typestr9)
+
+```
+
+## Visualization
+
+Here is the final visualization of the hurricane data separated by type on the legend.
+
+```{r,echo=FALSE}
+clrs=c("grey","lightblue", "blue","green","orange","red","purple")
+map("world",xlim=c(-85,-30),ylim=c(5,58))
+legendh=c("Tropical Depression", "Tropical Storm", "Category 1","Category 2", "Category 3", "Category 4", "Category 5")
+points(long,lat,pch=20,col=typestr10,cex=0.5)
+legend("topright",legendh, horiz = F, col = clrs,cex=0.8,pch=20)
+
+```
+
+
