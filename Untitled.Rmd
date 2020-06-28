@@ -1,5 +1,5 @@
 ---
-title: "test_run"
+title: "test2"
 output: html_document
 ---
 
@@ -17,17 +17,21 @@ hurricane=readHTMLTable(page2)
 hurdata=hurricane[[1]]
 
 
-
 ```
 
-## Data:
+## R Markdown
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+```{r,echo=FALSE}
 Data was scraped from https://www.wunderground.com/hurricane/archive/AL/2019/Hurricane-Dorian/2019235N10324. This data summarizes latitude and longitude points of types of tropical weather in the South East United States.
 
 
 ```{r, echo=FALSE}
 lat=as.numeric(as.character(hurdata$` Lat `))
 long=as.numeric(as.character(hurdata$` Lon `))
-
 typestr=as.character(hurdata$` Storm Type `)
 typestr1=gsub("Tropical Depression","grey",typestr)
 typestr2=gsub("Tropical Storm","lightblue",typestr1)
@@ -46,13 +50,15 @@ typestr10=gsub("Extratropical", "grey", typestr9)
 
 Here is the final visualization of the hurricane data separated by type on the legend.
 
+
+
+
 ```{r,echo=FALSE}
 clrs=c("grey","lightblue", "blue","green","orange","red","purple")
 map("world",xlim=c(-85,-30),ylim=c(5,58))
 legendh=c("Tropical Depression", "Tropical Storm", "Category 1","Category 2", "Category 3", "Category 4", "Category 5")
 points(long,lat,pch=20,col=typestr10,cex=0.5)
 legend("topright",legendh, horiz = F, col = clrs,cex=0.8,pch=20)
-
 ```
 
-
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
